@@ -1,0 +1,5 @@
+### Crear usuario en Moodle
+POST https://localhost:443/webservice/rest/server.php?wstoken=042d57f4f01acc2686cbf7a60fab5d14&wsfunction=core_user_create_users&moodlewsrestformat=json
+Content-Type: application/x-www-form-urlencoded
+
+users[0][username]=api_user&users[0][password]=Password123*&users[0][firstname]=Api&users[0][lastname]=User&users[0][email]=api.user@example.com&users[0][auth]=manual

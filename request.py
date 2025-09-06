@@ -1,37 +1,33 @@
 import requests
-import json
 import os
+from dotenv import load_dotenv
 
-# URL de la API de Moodle
-moodle_url = "http://localhost:8085/webservice/rest/server.php"
+# Load environment variables from .env file
+load_dotenv()
 
-# Credenciales de autenticación
-MOODLE_TOKEN = os.getenv("MOODLE_API_TOKEN")
-username = "user"
+url = "http://localhost:8085/webservice/rest/server.php"
+token = os.getenv("MOODLE_API_TOKEN")
+# Verificar si se obtuvo el token
+print('Token:', token)
 
-# Datos del nuevo usuario
-new_user = {
-    "username": "testAPI",
-    "password": "newpassword",
-    "firstname": "API",
-    "lastname": "User",
-    "email": "api_user@example.com"
+# Definición del payload para crear un usuario
+payload = {
+    "wstoken": token, # Token de acceso
+    "wsfunction": "core_user_create_users", # Función para crear usuarios
+    "moodlewsrestformat": "json", # Formato de respuesta
+    # Datos del nuevo usuario
+    "users[0][username]": "python@example.com",
+    "users[0][password]": "Password123*",
+    "users[0][firstname]": "python",
+    "users[0][lastname]": "request",
+    "users[0][email]": "python@example.com",
+    "users[0][auth]": "manual"
+}
+# La API de Moodle requiere que los datos se envíen como formulario
+headers = {
+    "Content-Type": "application/x-www-form-urlencoded"
 }
 
-# Parámetros de la solicitud
-params = {
-    "wstoken": MOODLE_TOKEN,
-    "wsfunction": "core_user_create_users",
-    "moodlewsrestformat": "json"
-}
+response = requests.post(url, data=payload, headers=headers)
 
-# Datos de la solicitud
-data = {
-    "users [0]": json.dumps(new_user)
-}
-
-# Enviar la solicitud
-response = requests.post(moodle_url, params=params, data=data)
-
-# Verificar la respuesta
-print("Respuesta de Moodle:", response.json())
+print(response.json())

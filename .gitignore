@@ -2,3 +2,7 @@
 php.ini
 # Python
 .venv
+# Directories
+mariadb_data
+moodle_data
+moodledata_data
